@@ -17,11 +17,11 @@ kernel.bin: kernel.tmp
 boot.bin: boot.asm
 	nasm -f bin $< -o $@
 
-final_raw_binary: boot.bin kernel.bin
+final_raw_binary.bin: boot.bin kernel.bin
 	type boot.bin  kernel.bin > $@
 
-run: final_raw_binary
+run: final_raw_binary.bin
 	qemu-system-i386 -fda $<
 
 clean:
-	del boot.bin kernel.bin final_raw_binary kernel-entry.o kernel.o kernel.tmp
+	del boot.bin kernel.bin final_raw_binary.bin kernel-entry.o kernel.o kernel.tmp

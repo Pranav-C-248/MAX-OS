@@ -1,4 +1,4 @@
-.PHONY: all clean run
+.PHONY: all clean run dump
 
 all: final_raw_binary.bin
 
@@ -21,7 +21,9 @@ final_raw_binary.bin: boot.bin kernel.bin
 	type boot.bin  kernel.bin > $@
 
 run: final_raw_binary.bin
-	qemu-system-i386 -fda $<
+	qemu-system-i386 -s -S -fda  $<
 
 clean:
 	del boot.bin kernel.bin final_raw_binary.bin kernel-entry.o kernel.o kernel.tmp
+dump:final_raw_binary.bin
+	objdump -D -m i386 -b binary final_raw_binary.bin > dump.txt

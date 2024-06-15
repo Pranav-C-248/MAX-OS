@@ -2,11 +2,12 @@
 ;	boot.asm
 ;		- A Simple Bootloader
 ;*********************************************
- 
-org		0x7c00				; We are loaded by BIOS at 0x7C00
-bits	16					; We are still in 16 bit Real Mode
+[bits 16]				; We are still in 16 bit Real Mode 
+[org 0x7c00]				; We are loaded by BIOS at 0x7C00
 
 
+section .data
+	s1 db 'loading to memory',0
 
 KERNEL_OFFSET equ 0x1000
 
@@ -29,7 +30,9 @@ jmp $				;loop incase returns
 
 [bits 16]
 load_kernel :
-	mov bx,[KERNEL_OFFSET]
+	mov bx,s1
+	call print_string
+	mov bx,KERNEL_OFFSET
 	mov dl,[BOOT_DRIVE]		;which drive to read from
 	mov dh,2 				;which sector to read
 	call disk_load 

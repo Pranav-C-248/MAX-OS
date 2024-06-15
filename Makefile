@@ -1,6 +1,6 @@
 .PHONY: all clean run
 
-all: final_raw_binary
+all: final_raw_binary.bin
 
 kernel-entry.o: kernel_entry.asm
 	nasm $< -f elf32 -o $@

@@ -21,12 +21,14 @@ mov sp,bp
 call load_kernel 	;this loads kernel into memory
 call switch_to_32bit 	; this initiates pm mode
 
+
+jmp $				;loop incase returns
+
 %include "print_string_16.asm"
 %include "disk.asm"
 %include "gdt.asm"
 %include "switch-to-32bit.asm"
 
-jmp $				;loop incase returns
 
 [bits 16]
 load_kernel :

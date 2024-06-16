@@ -2,9 +2,6 @@ section .data
     DISK_ERROR db 'Disk Error', 0
     SECTOR_ERROR db 'Sector Error', 0
 
-section .text
-    global disk_load
-
 disk_load:
     pusha
     push dx

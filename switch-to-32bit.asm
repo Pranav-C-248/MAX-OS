@@ -3,9 +3,6 @@
 section .data
     entry  db 'entering 32 bit mode' ,0
 
-section .text
-    global switch_to_32bit
-
 switch_to_32bit:
 
     mov bx,entry

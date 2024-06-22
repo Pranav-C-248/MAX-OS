@@ -2,13 +2,16 @@
 
 all: run
 
-kernel.bin: kernel-entry.o kernel.o
+kernel.bin: kernel-entry.o kernel.o screen_driver.o
 	ld -m elf_i386 -o $@ -Ttext 0x1000 $^ --oformat binary
 
 kernel-entry.o: kernel_entry.asm
 	nasm $< -f elf -o $@
 
-kernel.o: kernel.c
+kernel.o: kernel.c  screen_driver.h
+	gcc -fno-pie -m32 -ffreestanding -c $< -o $@
+	
+screen_driver.o: screen_driver.c screen_driver.h
 	gcc -fno-pie -m32 -ffreestanding -c $< -o $@
 
 boot.bin: boot.asm

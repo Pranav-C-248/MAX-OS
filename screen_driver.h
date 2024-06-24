@@ -19,10 +19,13 @@
 extern void set_cursor(int offset);
 extern int get_cursor();
 extern int move_cursor_to_new_line(int  offset);
-extern void print_char(char a, int offset);
+extern void set_char(char a, int offset);
 extern void print_string(char *string);
 extern void clrscr();
 extern int get_row_from_offset(int offset);
+int scroll(int offset);
+void int_to_str(int num, char *str);
+void print_int(int num);
 
 
 #endif

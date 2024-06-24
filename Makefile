@@ -24,6 +24,6 @@ run: final_raw_binary.bin
 	qemu-system-i386  -fda  $<
 
 clean:
-	rm boot.bin kernel.bin final_raw_binary.bin kernel-entry.o kernel.o 
+	rm boot.bin kernel.bin final_raw_binary.bin kernel-entry.o kernel.o screen_driver.o
 dump:final_raw_binary.bin
 	objdump -D -m i386 -b binary final_raw_binary.bin > dump.txt

@@ -21,7 +21,7 @@ void set_cursor(int offset) {
 int get_cursor(){
     //select high byte
     port_byte_out(VGA_CTRL_REGISTER,VGA_OFFSET_HIGH);
-    int offset=port_byte_in(VGA_DATA_REGISTER);
+    int offset=port_byte_in(VGA_DATA_REGISTER)<<8;
 
     //select low byte
     port_byte_out(VGA_CTRL_REGISTER,VGA_OFFSET_LOW);
@@ -33,7 +33,7 @@ int get_cursor(){
 
 void set_char(char character,int offset)
 {
-    char* vm= (char*) VIDEO_ADDRESS;
+    unsigned char* vm= (unsigned char*) VIDEO_ADDRESS;
     vm[offset]=character;
     vm[offset+1]=WHITE_ON_BLACK;
 }
@@ -49,7 +49,7 @@ int get_offset(int row, int col)
 }
 
 int move_cursor_to_new_line(int offset)
- {
+{
     return get_offset(get_row_from_offset(offset)+ 1,0);
 }
 
@@ -82,8 +82,6 @@ void print_string( char *s)
     int i =0;
     while(s[i]!='\0')
     {
-
-        // set_char('a',0);
         if (offset>=MAX_COLS*2*MAX_ROWS)
         {
             offset=scroll(offset);
@@ -99,14 +97,37 @@ void print_string( char *s)
             offset+=2;
         }
         i++;
+        set_cursor(offset);
     }
-    set_cursor(offset); //offset of videoMemory
 }
+
+// void print_int(int num){
+//     char str[12];
+//     int i=0;
+//     int c=0;
+//     int a=num;
+//     while (num != 0) {
+//         str[i++] = (num % 10)+'0' ;
+//         num /= 10;
+//         c++;
+//     }
+//     str[c]='\0';
+//     for (int i = 0; i < c/2; i++)
+//     {
+//         char t=str[i];
+//         // printf("%c\n",t);
+//         str[i]=str[c-i-1];
+//         str[c-1-i]=t;
+//     }
+//     str[c+1]='\0';
+//     print_string(str);  
+// }
+
 void clrscr() 
 {
     for (int i = 0; i < MAX_COLS * MAX_ROWS; ++i) 
     {
-    set_char(' ', i * 2);
+    set_char('\0', i * 2);
     }
     set_cursor(get_offset(0, 0));
 }

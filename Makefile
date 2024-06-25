@@ -25,5 +25,13 @@ run: final_raw_binary.bin
 
 clean:
 	rm boot.bin kernel.bin final_raw_binary.bin kernel-entry.o kernel.o screen_driver.o
+
 dump:final_raw_binary.bin
 	objdump -D -m i386 -b binary final_raw_binary.bin > dump.txt
+
+kernel.elf: kernel-entry.o kernel.o screen_driver.o
+	x86_64-elf-ld -m elf_i386 -o $@ -Ttext 0x1000 $^
+
+debug: final_raw_binary.bin kernel.elf
+	qemu-system-i386 -s -S -fda os-image.bin &
+	i386-elf-gdb -ex "target remote localhost:1234" -ex "symbol-file kernel.elf"

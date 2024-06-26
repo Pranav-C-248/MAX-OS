@@ -31,7 +31,7 @@ int get_cursor(){
 
 }
 
-void set_char(char character,int offset)
+void print_char(char character,int offset)
 {
     unsigned char* vm= (unsigned char*) VIDEO_ADDRESS;
     vm[offset]=character;
@@ -70,7 +70,7 @@ int scroll(int offset)
         
     for(int col=0;col<MAX_COLS;col++)
     {
-    set_char(' ',get_offset(MAX_ROWS-1,col));
+    print_char(' ',get_offset(MAX_ROWS-1,col));
     }
 
     return offset-2*MAX_COLS;
@@ -93,7 +93,7 @@ void print_string( char *s)
         }
         else
         {
-            set_char(s[i],offset);
+            print_char(s[i],offset);
             offset+=2;
         }
         i++;
@@ -127,7 +127,7 @@ void clrscr()
 {
     for (int i = 0; i < MAX_COLS * MAX_ROWS; ++i) 
     {
-    set_char('\0', i * 2);
+    print_char('\0', i * 2);
     }
     set_cursor(get_offset(0, 0));
 }

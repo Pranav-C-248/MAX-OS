@@ -6,8 +6,8 @@
 
 #define VGA_CTRL_REGISTER 0x3d4
 #define VGA_DATA_REGISTER 0x3d5
-#define VGA_OFFSET_LOW 0x0f
-#define VGA_OFFSET_HIGH 0x0e
+#define VGA_OFFSET_LOW 0x0f  //15
+#define VGA_OFFSET_HIGH 0x0e //14
 
 #define VIDEO_ADDRESS 0xb8000
 #define MAX_ROWS 25
@@ -19,10 +19,14 @@
 extern void set_cursor(int offset);
 extern int get_cursor();
 extern int move_cursor_to_new_line(int  offset);
-extern void print_char(char a, int offset);
+extern void set_char(char a, int offset);
 extern void print_string(char *string);
 extern void clrscr();
 extern int get_row_from_offset(int offset);
+extern int get_offset(int row, int col);
+int scroll(int offset);
+
+// void print_int(int num);
 
 
 #endif

@@ -39,11 +39,18 @@ Work Flow:
 #include <stdint.h>
 
 idt_gate_t idt[256];
+idt_descriptor_t idt_descriptor;
 
-set_idt_gate(int n,uint32_t handler){
+void set_idt_gate(int n,uint32_t handler){
     idt[n].low_offset=low_16(handler);
     idt[n].selector=0x08;
     idt[n].always0=0;
     idt[n].flags=0x8e;
     idt[n].high_offset=high_16(handler);
+}
+
+void load_idt(){
+    idt_descriptor.limit=256*sizeof(idt_gate_t)-1;
+    idt_descriptor.base_address=(uint32_t)&idt;
+    asm volatile("lidt (%0)" : : "r" (&idt_descriptor));
 }

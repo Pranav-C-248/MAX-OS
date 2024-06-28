@@ -101,27 +101,6 @@ void print_string( char *s)
     }
 }
 
-// void print_int(int num){
-//     char str[12];
-//     int i=0;
-//     int c=0;
-//     int a=num;
-//     while (num != 0) {
-//         str[i++] = (num % 10)+'0' ;
-//         num /= 10;
-//         c++;
-//     }
-//     str[c]='\0';
-//     for (int i = 0; i < c/2; i++)
-//     {
-//         char t=str[i];
-//         // printf("%c\n",t);
-//         str[i]=str[c-i-1];
-//         str[c-1-i]=t;
-//     }
-//     str[c+1]='\0';
-//     print_string(str);  
-// }
 
 void clrscr() 
 {

@@ -1,5 +1,5 @@
 #pragma once
-#include <stdint.h>;
+#include <stdint.h>
 
 #define low_16(address) (uint16_t)((address) & 0xffff)
 #define high_16(address) (uint16_t)(((address) >> 16) & 0xFFFF)
@@ -13,5 +13,13 @@ typedef struct {
     uint16_t high_offset; // Higher 16 bits of handler function address
 } __attribute__((packed)) idt_gate_t;
 
+typedef struct{
+    uint16_t limit;
+    uint32_t base_address;
+}__attribute__((packed)) idt_descriptor_t;
+
+
 extern void set_idt_gate(int n, uint32_t handler);
+void load_idt();
+
 

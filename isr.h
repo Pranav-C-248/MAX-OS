@@ -1,5 +1,5 @@
 #pragma once
-#include <stdint.h>;
+#include <stdint.h>
 
 typedef struct 
 {
@@ -7,9 +7,14 @@ typedef struct
     uint32_t edi, esi, ebp, esp, ebx, edx, ecx, eax; // General registers
     uint32_t int_no, err_code; // Interrupt number and error code
     uint32_t eip, cs, eflags, useresp, ss; // Automatically pushed by the CPU
-    
+
 }registers_t;
 
+typedef void (*isr)(registers_t*);
+
+extern char *exception_messages[32];
+
+extern isr interrupt_handlers[256];
 
 
 
@@ -71,101 +76,13 @@ extern void irq13();
 extern void irq14();
 extern void irq15();
 
-
-char *exception_messages[] = {
-        "Division By Zero",
-        "Debug",
-        "Non Maskable Interrupt",
-        "Breakpoint",
-        "Into Detected Overflow",
-        "Out of Bounds",
-        "Invalid Opcode",
-        "No Coprocessor",
-
-        "Double Fault",
-        "Coprocessor Segment Overrun",
-        "Bad TSS",
-        "Segment Not Present",
-        "Stack Fault",
-        "General Protection Fault",
-        "Page Fault",
-        "Unknown Interrupt",
-
-        "Coprocessor Fault",
-        "Alignment Check",
-        "Machine Check",
-        "Reserved",
-        "Reserved",
-        "Reserved",
-        "Reserved",
-        "Reserved",
-
-        "Reserved",
-        "Reserved",
-        "Reserved",
-        "Reserved",
-        "Reserved",
-        "Reserved",
-        "Reserved",
-        "Reserved"
-};
-
-
-void isr_handler(registers_t r);
-void irq_handler(registers_t *t);
+void isr_handler(registers_t* r);
 void interrupt_install(); // calls set_idt_gate and maps each nth irq to nth handler
-typedef void (*isr)(registers_t*);
-
-irq interrupt_handlers[256];
+void install_interrupt_handler(uint8_t n,isr handler_function); //n:irq_no ; handler function: pointer to handler function 
 
 
+//keyboard_handler functions 
+//IRQ1 calls this dude to solve irq1
+static void keyboard_callback(registers_t *regs);
+void identify_key(uint8_t scancode);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// void isr_handler(registers_t *r);

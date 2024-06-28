@@ -3,6 +3,9 @@ section .data
     SECTOR_ERROR db 'Sector Error', 0
 
 disk_load:
+; reading from disk requires setting specific values in all registers
+    ; so we will overwrite our input parameters from 'dx'. Let's save it
+    ; to the stack for later use.
     pusha
     push dx
 
@@ -22,11 +25,11 @@ disk_load:
     ret
 
 disk_error:
-    mov dx, DISK_ERROR
+    mov bx, DISK_ERROR
     call print_string
     jmp $
 
 sectors_error:
-    mov dx, SECTOR_ERROR
+    mov bx, SECTOR_ERROR
     call print_string
     jmp $

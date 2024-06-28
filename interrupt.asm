@@ -56,7 +56,7 @@ global irq15
 ;this will call the interrupt_handler
 ;the way to differentiate which isr label called the function is , the 2nd byte that it pushes
 
-isr_common:
+isr_common_stub:
     pusha
     mov ax,ds ;move data segment address to ax
     push eax

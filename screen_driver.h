@@ -1,6 +1,4 @@
-
-#ifndef SCREEN_DRIVER_H
-#define SCREEN_DRIVER_H
+#pragma once
 
 //define constants for accessing cursor, printing characters
 
@@ -15,7 +13,8 @@
 #define WHITE_ON_BLACK 0x0f
 
 //public functions
-
+unsigned char port_byte_in(unsigned short port);
+void port_byte_out(unsigned short port, unsigned char data);
 extern void set_cursor(int offset);
 extern int get_cursor();
 extern int move_cursor_to_new_line(int  offset);
@@ -27,5 +26,3 @@ int scroll(int offset);
 
 // void print_int(int num);
 
-
-#endif

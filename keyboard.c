@@ -2,6 +2,7 @@
 #include "screen_driver.h"
 #include "keyboard.h"
 #include "util.h"
+#include "port.h"
 #include "shell.h"
 
 
@@ -28,7 +29,6 @@ static void keyboard_callback(registers_t *regs) {
             int offset=get_cursor()-2;
             print_char(' ',offset);
             set_cursor(offset);
-            // print_string("BACKSPACE");
 
         }
     }
@@ -37,7 +37,7 @@ static void keyboard_callback(registers_t *regs) {
         if(cur_len==0){
             print_string("\n>");
         }
-        parse_command(key_buffer);
+        else{parse_command(key_buffer);}
         key_buffer[0]='\0';
     }
     else{
@@ -51,6 +51,6 @@ static void keyboard_callback(registers_t *regs) {
 }
 
 void init_keyboard(){
-    install_interrupt_handler(33,keyboard_callback);
+    install_interrupt_handler(33,keyboard_callback); //register keyboard callback as handler for irq1
 }
 

@@ -1,6 +1,6 @@
 #include "isr.h"
 #include "idt.h"
-#include "screen_driver.h"
+#include "port.h"
 
 // char*exception_messages[32] = {
 //         "Division By Zero",
@@ -40,9 +40,9 @@
 //generic handler to print nth reserved interrupt
 void isr_handler(registers_t *r) {
     // print_string(exception_messages[r->int_no]);
-    char s[100]="asdasd";
-    print_string(s);
-    print_string("\n");
+    // char s[100]="asdasd";
+    // print_string(s);
+    print_string("ISR ERROR IN ISR.C");
 }
 
 //setting each gate.

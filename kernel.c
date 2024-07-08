@@ -3,6 +3,10 @@
 #include "isr.h"
 #include "util.h"
 #include "shell.h"
+#include "tetris.h"
+// #include "time.h"
+#include "memory.h"
+
 
 
 void main() {
@@ -15,10 +19,21 @@ void main() {
 
     print_string("Initializing keyboard (IRQ 1).\n");
     init_keyboard();
-    print_string("Initialized Shell\n");
+    // print_string("Initialized Shell\n");
 
-    initate_shell();
-    print_string(">");
+    // initate_shell();
+    // print_string(">");
+
+    print_string("Initializing Dynamic memory.\n");
+    init_dynamic_memory();
+    int *a=mallok(20*sizeof(int));
+    for(int i=0;i<20;i++){
+        *(a+i)=10;
+    }
+    for(int i=0;i<20;i++){
+        print_int(*(a+i));
+    }
+
     
 
 }

@@ -28,7 +28,7 @@ void print_int(int num){
     for (int i = 0; i < c/2; i++)
     {
         char t=str[i];
-        // printf("%c\n",t);
+        // print_string("%c\n",t);
         str[i]=str[c-i-1];
         str[c-1-i]=t;
     }

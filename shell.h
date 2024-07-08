@@ -3,9 +3,7 @@
 
 #pragma once
 
-static char *commands[10]={
-    "CLS","EXIT"
-}; 
+extern char *commands[10];
 #define MAX_COMMANDS 10
 
 typedef void(*cmd)();

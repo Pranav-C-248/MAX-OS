@@ -21,14 +21,9 @@ void parse_command(char *command)
             break;
         }
     }
-    if (i == MAX_COMMANDS)
-    {
-        print_string("\n");
-        char *s=commands[0];
-        print_string(commands[0]);
+    if (i == MAX_COMMANDS){
         print_string("\nUndefined Command\n>");
-        print_string("\n");
-        print_int(compare_string("CLS",commands[0]));
+
     }
 }
 

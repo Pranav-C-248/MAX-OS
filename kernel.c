@@ -1,42 +1,47 @@
-#include "screen_driver.h"
-#include <stdint.h>
-#include <stddef.h>
+#include "/Users/manaskumar/Desktop/MAX-OS-P1/essentials/screen_driver.h"
+#include "/Users/manaskumar/Desktop/MAX-OS-P1/essentials/keyboard.h"
+#include "/Users/manaskumar/Desktop/MAX-OS-P1/essentials/isr.h"
+#include "/Users/manaskumar/Desktop/MAX-OS-P1/essentials/util.h"
+#include "/Users/manaskumar/Desktop/MAX-OS-P1/essentials/shell.h"
+#include "tetris.h"
+#include "/Users/manaskumar/Desktop/MAX-OS-P1/essentials/time.h"
 
-// Function to print max-OS text at the top of the screen
-void print_max_os() {
-    const char *max_os_text = "max-OS";
-    int length = 6; // Length of "max-OS"
-    int row = 0; // Top row
-    int col = (MAX_COLS - length) / 2;
-    int offset = get_offset(row, col);
-    for (int i = 0; i < length; i++) {
-        set_char(max_os_text[i], offset + 2 * i);
+
+struct tetris game;
+
+void timer_callback(registers_t *regs) {
+    static int count = 0;
+    char cmd;
+
+    count++;
+    if (count % 50 == 0) {
+        tetris_print(&game);
+    }
+    if (count % 350 == 0) {
+        tetris_gravity(&game);
+    }
+    if ((cmd = get_char())) {
+        tetris_handle_input(&game, cmd);
     }
 }
 
-// Delay function
-void delay(uint32_t count) {
-    for (volatile uint32_t i = 0; i < count; i++) {
-        __asm__ __volatile__("nop");
-    }
-}
-
-// Simple startup screen function
-void startup_screen() {
-    clrscr();
-    print_string("Starting up...");
-    delay(100000000); // Adjust the delay as neededz
-}
-
-// Kernel main function
 void main() {
-    clrscr(); // Clear the screen
-    startup_screen(); // Show startup screen
-    clrscr(); // Clear the screen again
-    print_max_os(); // Print the max-OS text at the top
+    clrscr();
+    print_string("Installing interrupt service routines (ISRs).\n");
+    interrupt_install();
 
-    // Add your kernel logic here
-    while (1) {
-        // Halt the CPU
-    }
+    print_string("Enabling external interrupts.\n");
+    __asm__ __volatile__ ("sti");
+
+    print_string("Initializing keyboard (IRQ 1).\n");
+    init_keyboard();
+
+    print_string("Initializing timer.\n");
+    init_timer(100); // Set timer frequency to 100 Hz
+
+    print_string("Starting Tetris Game.\n");
+    tetris_init(&game, 20, 10);
+
+    tetris_run(&game, 20, 10);
+
 }

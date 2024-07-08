@@ -1,4 +1,6 @@
 #include "memory.h"
+#include "/mnt/d/Backup/azazel/Desktop/OS_DEV/MAX-OS/essentials/screen_driver.h"
+#include "/mnt/d/Backup/azazel/Desktop/OS_DEV/MAX-OS/essentials/util.h"
 
 /*So heres what well do:
 1)Get one big chunk of memory and assign all dynamic mem chunks from that chunk.
@@ -18,6 +20,9 @@ static uint8_t complete_memory[MAX_DYNAMIC_MEMORY]; //big chunk
 static mem_node *dynamic_mem_start;
 
 void init_dynamic_memory() {
+    print_int(&complete_memory);
+    print_string(" ");
+    print_int(&complete_memory+(uint8_t)MAX_DYNAMIC_MEMORY);
     dynamic_mem_start=(struct mem_node*)complete_memory;
     dynamic_mem_start->size=MAX_DYNAMIC_MEMORY-NODE_SIZE;
     dynamic_mem_start->next=NULL_POINTER;

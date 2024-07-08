@@ -1,6 +1,7 @@
 #include "isr.h"
 #include "idt.h"
 #include "port.h"
+#include "screen_driver.h"
 
 // char*exception_messages[32] = {
 //         "Division By Zero",

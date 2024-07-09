@@ -1,14 +1,6 @@
 #include "screen_driver.h"
+#include "port.h"
 
-unsigned char port_byte_in(unsigned short port) {
-    unsigned char result;
-    __asm__("in %%dx, %%al" : "=a" (result) : "d" (port));
-    return result;
-}
-
-void port_byte_out(unsigned short port, unsigned char data) {
-    __asm__("out %%al, %%dx" : : "a" (data), "d" (port));
-}
 
 void set_cursor(int offset) {
     offset /= 2;
@@ -17,6 +9,8 @@ void set_cursor(int offset) {
     port_byte_out(VGA_CTRL_REGISTER, VGA_OFFSET_LOW);                   //select low byte
     port_byte_out(VGA_DATA_REGISTER, (unsigned char) (offset & 0xff));
 }
+
+
 
 int get_cursor(){
     //select high byte
@@ -31,7 +25,7 @@ int get_cursor(){
 
 }
 
-void set_char(char character,int offset)
+void print_char(char character,int offset)
 {
     unsigned char* vm= (unsigned char*) VIDEO_ADDRESS;
     vm[offset]=character;
@@ -70,13 +64,13 @@ int scroll(int offset)
         
     for(int col=0;col<MAX_COLS;col++)
     {
-    set_char(' ',get_offset(MAX_ROWS-1,col));
+    print_char(' ',get_offset(MAX_ROWS-1,col));
     }
 
     return offset-2*MAX_COLS;
 }
 
-void print_string( char *s)
+void print_string(char *s)
 {
     int offset=get_cursor();
     int i =0;
@@ -93,7 +87,7 @@ void print_string( char *s)
         }
         else
         {
-            set_char(s[i],offset);
+            print_char(s[i],offset);
             offset+=2;
         }
         i++;
@@ -101,34 +95,20 @@ void print_string( char *s)
     }
 }
 
-// void print_int(int num){
-//     char str[12];
-//     int i=0;
-//     int c=0;
-//     int a=num;
-//     while (num != 0) {
-//         str[i++] = (num % 10)+'0' ;
-//         num /= 10;
-//         c++;
-//     }
-//     str[c]='\0';
-//     for (int i = 0; i < c/2; i++)
-//     {
-//         char t=str[i];
-//         // printf("%c\n",t);
-//         str[i]=str[c-i-1];
-//         str[c-1-i]=t;
-//     }
-//     str[c+1]='\0';
-//     print_string(str);  
-// }
 
 void clrscr() 
 {
     for (int i = 0; i < MAX_COLS * MAX_ROWS; ++i) 
     {
-    set_char('\0', i * 2);
+    print_char('\0', i * 2);
     }
     set_cursor(get_offset(0, 0));
 }
 
+
+void set_char(char character,int offset)
+{
+    unsigned char* vm= (unsigned char*) VIDEO_ADDRESS;
+    vm[offset]=character;
+    vm[offset+1]=WHITE_ON_BLACK;
+}

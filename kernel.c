@@ -1,8 +1,11 @@
-#include "screen_driver.h"
-#include <stdint.h>
-#include <stddef.h>
+#include "/Users/manaskumar/Desktop/MAX-OS-P1/essentials/screen_driver.h"
+#include "/Users/manaskumar/Desktop/MAX-OS-P1/essentials/keyboard.h"
+#include "/Users/manaskumar/Desktop/MAX-OS-P1/essentials/isr.h"
+#include "/Users/manaskumar/Desktop/MAX-OS-P1/essentials/util.h"
+#include "/Users/manaskumar/Desktop/MAX-OS-P1/essentials/shell.h"
+#include "tetris.h"
+//#include "/Users/manaskumar/Desktop/MAX-OS-P1/essentials/time.h"
 
-// Function to print max-OS text at the top of the screen
 void print_max_os() {
     const char *max_os_text = "max-OS";
     int length = 6; // Length of "max-OS"
@@ -14,29 +17,28 @@ void print_max_os() {
     }
 }
 
-// Delay function
-void delay(uint32_t count) {
-    for (volatile uint32_t i = 0; i < count; i++) {
-        __asm__ __volatile__("nop");
-    }
-}
 
-// Simple startup screen function
+
 void startup_screen() {
     clrscr();
     print_string("Starting up...");
-    delay(100000000); // Adjust the delay as neededz
 }
-
-// Kernel main function
 void main() {
-    clrscr(); // Clear the screen
-    startup_screen(); // Show startup screen
-    clrscr(); // Clear the screen again
-    print_max_os(); // Print the max-OS text at the top
+    clrscr();
+    startup_screen();
+    print_max_os();
+    
+    print_string("Installing interrupt service routines (ISRs).\n");
+    interrupt_install();
 
-    // Add your kernel logic here
-    while (1) {
-        // Halt the CPU
-    }
+    print_string("Enabling external interrupts.\n");
+    __asm__ __volatile__ ("sti");
+
+    print_string("Initializing keyboard (IRQ 1).\n");
+    init_keyboard();
+
+
+    print_string("Initialized Shell\n");
+    initate_shell();
+    print_string(">");
 }

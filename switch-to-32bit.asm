@@ -4,7 +4,6 @@ section .data
     entry  db 'entering 32 bit mode' ,0
 
 switch_to_32bit:
-
     mov bx,entry
     call print_string
     cli                     ; 1. disable interrupts

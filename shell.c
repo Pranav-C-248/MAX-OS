@@ -1,29 +1,35 @@
 #include "shell.h"
 #include "util.h"
 #include "screen_driver.h"
-// #include "memory.h"
-// #include "/mnt/d/Backup/azazel/Desktop/OS_DEV/MAX-OS/main/tetris.h"
+#include "/Users/manaskumar/Desktop/MAX-OS-P1/main/tetris.c"
+#include "keyboard.h"
 
-char *commands[10] = {
-    "CLS", "EXIT", "RANDOM"
-    }; // stores all the command keywords , to compare with input
 
-void parse_command(char *command)
-{
+#define MAX_BUFFER_SIZE 256
+
+char *commands[MAX_COMMANDS] = {
+    "CLS", "EXIT", "RANDOM", "ECHO"
+}; 
+void parse_command(char *command) {
     int i;
 
-    for (i = 0; i < MAX_COMMANDS; i++)
-    {
-        if (compare_string(command, commands[i]) == 0)
-        {
-            cmd command_executor = commands_address[i]; // gets the function that executes the command.
-            command_executor();
+    char *space = my_strchr(command, ' ');
+    if (space != NULL) {
+        *space = '\0'; // Terminate the command keyword
+    }
+
+    for (i = 0; i < MAX_COMMANDS; i++) {
+        if (compare_string(command, commands[i]) == 0) {
+            if (space != NULL) {
+                *space = ' '; // Restore the space character
+            }
+            cmd command_executor = commands_address[i]; // Gets the function that executes the command.
+            command_executor(space != NULL ? space + 1 : NULL); // Pass the arguments to the command executor
             break;
         }
     }
-    if (i == MAX_COMMANDS){
+    if (i == MAX_COMMANDS) {
         print_string("\nUndefined Command\n>");
-
     }
 }
 
@@ -45,18 +51,40 @@ void exit()
 
 void random()
  {
-     int x = rand();
+    int x = rand();
     srand(x);
-     print_int(x);
+    print_string("\n>");
+    print_int(x);
+
+
  }
+
+ //void run_tetris()
+/*{
+    struct tetris game;
+    tetris_init(&game, 20, 10);
+    tetris_run(&game, 20, 10);
+    print_string(">");
+}*/
 void initate_shell()
 {
     set_command(0, cls);
     set_command(1, exit);
     set_command(2, random);
-    // set_command(3,prove_dyna_memory);
-    // set_command(2,tetris_run);
+    set_command(3, echo);
 }
+
+
+void echo(char *args) {
+    if (args != NULL) {
+        print_string("\nEcho: ");
+        print_string(args);
+    } else {
+        print_string("\nEcho: No arguments provided.");
+    }
+    print_string("\n>");
+}
+
 
 // void prove_dyna_memory(){
 //     init_dynamic_memory();

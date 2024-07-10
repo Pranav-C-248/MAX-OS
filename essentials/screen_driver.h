@@ -24,5 +24,8 @@ extern void clrscr();
 extern int get_row_from_offset(int offset);
 int scroll(int offset);
 
+int get_offset(int row, int col);  // Declare get_offset here
+extern void set_char(char a, int offset);
+
 // void print_int(int num);
 

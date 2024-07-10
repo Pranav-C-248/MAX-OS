@@ -18,11 +18,6 @@ extern isr interrupt_handlers[256];
 
 
 
-//declare the isrs , these will be defined in assembly.
-// when isr0 is triggered it goes to isr0 label in the assembly and then calls the isr_handle function 
-// from within c, whihc just prints the error instead of actually handling it.
-// For irq related to keyboard however we need to write a specific and real handler function.
-
 extern void isr0();
 extern void isr1();
 extern void isr2();
@@ -77,12 +72,10 @@ extern void irq14();
 extern void irq15();
 
 void isr_handler(registers_t* r);
-void interrupt_install(); // calls set_idt_gate and maps each nth irq to nth handler
-void install_interrupt_handler(uint8_t n,isr handler_function); //n:irq_no ; handler function: pointer to handler function 
+void interrupt_install(); 
+void install_interrupt_handler(uint8_t n,isr handler_function); 
 
 
-//keyboard_handler functions 
-//IRQ1 calls this dude to solve irq1
 static void keyboard_callback(registers_t *regs);
 void identify_key(uint8_t scancode);
 

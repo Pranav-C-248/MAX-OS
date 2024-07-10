@@ -6,4 +6,5 @@
 
 
 void init_keyboard();
+
 static char key_buffer[256];

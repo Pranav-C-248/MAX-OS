@@ -1,51 +1,62 @@
-.PHONY: all clean run dump
+.PHONY: all clean run dump debug
 
-all: run
+# Define the cross-compiler tools
+CC=x86_64-elf-gcc
+LD=x86_64-elf-ld
+AS=nasm
 
-kernel.bin: kernel-entry.o kernel.o screen_driver.o interrupts.o idt.o isr.o keyboard.o shell.o port.o util.o time.o
-	ld -m elf_i386 -o $@ -Ttext 0x1000 $^ --oformat binary
+# Compiler and linker flags
+CFLAGS=-m32 -ffreestanding -fno-pie -nostdlib
+LDFLAGS=-Ttext 0x1000 --oformat binary
 
-kernel-entry.o: /mnt/d/Backup/azazel/Desktop/OS_DEV/MAX-OS/assembly/kernel_entry.asm
-	nasm $< -f elf -o $@
+all: final_raw_binary.bin
 
-kernel.o: main/kernel.c 
-	gcc -fno-pie -m32  -c $< -o $@
+kernel.bin: kernel-entry.o kernel.o screen_driver.o interrupts.o idt.o isr.o keyboard.o shell.o port.o util.o time.o 
+	$(LD) -m elf_i386 -o $@ -Ttext 0x1000 $^ --oformat binary
 
-screen_driver.o: /mnt/d/Backup/azazel/Desktop/OS_DEV/MAX-OS/essentials/screen_driver.c /mnt/d/Backup/azazel/Desktop/OS_DEV/MAX-OS/essentials/screen_driver.h
-	gcc -fno-pie -m32 -ffreestanding -c $< -o $@
+kernel-entry.o: /Users/manaskumar/Desktop/MAX-OS-P1/assembly/kernel_entry.asm
+	$(AS) $< -f elf -o $@
 
-idt.o: /mnt/d/Backup/azazel/Desktop/OS_DEV/MAX-OS/essentials/idt.c /mnt/d/Backup/azazel/Desktop/OS_DEV/MAX-OS/essentials/idt.h
-	gcc -fno-pie -m32 -ffreestanding -c $< -o $@
+kernel.o: /Users/manaskumar/Desktop/MAX-OS-P1/main/kernel.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
-isr.o: /mnt/d/Backup/azazel/Desktop/OS_DEV/MAX-OS/essentials/isr.c /mnt/d/Backup/azazel/Desktop/OS_DEV/MAX-OS/essentials/isr.h /mnt/d/Backup/azazel/Desktop/OS_DEV/MAX-OS/essentials/idt.h
-	gcc -fno-pie -m32 -ffreestanding -c $< -o $@
+screen_driver.o: /Users/manaskumar/Desktop/MAX-OS-P1/essentials/screen_driver.c /Users/manaskumar/Desktop/MAX-OS-P1/essentials/screen_driver.h
+	$(CC) $(CFLAGS) -c $< -o $@
 
-util.o: /mnt/d/Backup/azazel/Desktop/OS_DEV/MAX-OS/essentials/util.c /mnt/d/Backup/azazel/Desktop/OS_DEV/MAX-OS/essentials/util.h
-	gcc -fno-pie -m32 -ffreestanding -c $< -o $@
+idt.o: /Users/manaskumar/Desktop/MAX-OS-P1/essentials/idt.c /Users/manaskumar/Desktop/MAX-OS-P1/essentials/idt.h
+	$(CC) $(CFLAGS) -c $< -o $@
 
-port.o: /mnt/d/Backup/azazel/Desktop/OS_DEV/MAX-OS/essentials/port.c /mnt/d/Backup/azazel/Desktop/OS_DEV/MAX-OS/essentials/port.c
-	gcc -fno-pie -m32 -ffreestanding -c $< -o $@
+isr.o: /Users/manaskumar/Desktop/MAX-OS-P1/essentials/isr.c /Users/manaskumar/Desktop/MAX-OS-P1/essentials/isr.h /Users/manaskumar/Desktop/MAX-OS-P1/essentials/idt.h
+	$(CC) $(CFLAGS) -c $< -o $@
 
-time.o: /mnt/d/Backup/azazel/Desktop/OS_DEV/MAX-OS/essentials/time.c /mnt/d/Backup/azazel/Desktop/OS_DEV/MAX-OS/essentials/time.h
-	gcc -fno-pie -m32 -ffreestanding -c $< -o $@
+util.o: /Users/manaskumar/Desktop/MAX-OS-P1/essentials/util.c /Users/manaskumar/Desktop/MAX-OS-P1/essentials/util.h
+	$(CC) $(CFLAGS) -c $< -o $@
 
-shell.o : /mnt/d/Backup/azazel/Desktop/OS_DEV/MAX-OS/essentials/shell.c /mnt/d/Backup/azazel/Desktop/OS_DEV/MAX-OS/essentials/shell.h
-	gcc -fno-pie -m32 -ffreestanding -c $< -o $@
+port.o: /Users/manaskumar/Desktop/MAX-OS-P1/essentials/port.c /Users/manaskumar/Desktop/MAX-OS-P1/essentials/port.h
+	$(CC) $(CFLAGS) -c $< -o $@
 
-# memory.o: /mnt/d/Backup/azazel/Desktop/OS_DEV/MAX-OS/essentials/memory.c /mnt/d/Backup/azazel/Desktop/OS_DEV/MAX-OS/essentials/memory.h
-# 	gcc -fno-pie -m32 -ffreestanding -c $< -o $@
+#memory.o: /Users/manaskumar/Desktop/MAX-OS-P1/essentials/memory.c /Users/manaskumar/Desktop/MAX-OS-P1/essentials/
 
-# tetris.o : main/tetris.c main/tetris.h
-# 	gcc -fno-pie -m32 -ffreestanding -c $< -o $@
+time.o: /Users/manaskumar/Desktop/MAX-OS-P1/essentials/time.c /Users/manaskumar/Desktop/MAX-OS-P1/essentials/time.h
+	$(CC) $(CFLAGS) -c $< -o $@
 
-keyboard.o: /mnt/d/Backup/azazel/Desktop/OS_DEV/MAX-OS/essentials/keyboard.c /mnt/d/Backup/azazel/Desktop/OS_DEV/MAX-OS/essentials/keyboard.h
-	gcc -fno-pie -m32 -ffreestanding -c $< -o $@
+shell.o: /Users/manaskumar/Desktop/MAX-OS-P1/essentials/shell.c /Users/manaskumar/Desktop/MAX-OS-P1/essentials/shell.h
+	$(CC) $(CFLAGS) -c $< -o $@
 
-interrupts.o: /mnt/d/Backup/azazel/Desktop/OS_DEV/MAX-OS/assembly/interrupt.asm
-	nasm $< -f elf -o $@
+##calculator.o: /Users/manaskumar/Desktop/MAX-OS-P1/main/calculator.c /Users/manaskumar/Desktop/MAX-OS-P1/main/calculator.h
+##	$(CC) $(CFLAGS) -c $< -o $@
 
-boot.bin: /mnt/d/Backup/azazel/Desktop/OS_DEV/MAX-OS/assembly/boot.asm
-	nasm -f bin $< -o $@
+text_editor.o: /Users/manaskumar/Desktop/MAX-OS-P1/main/text_editor.c /Users/manaskumar/Desktop/MAX-OS-P1/main/text_editor.h
+	$(CC) $(CFLAGS) -c $< -o $@
+
+keyboard.o: /Users/manaskumar/Desktop/MAX-OS-P1/essentials/keyboard.c /Users/manaskumar/Desktop/MAX-OS-P1/essentials/keyboard.h
+	$(CC) $(CFLAGS) -c $< -o $@
+
+interrupts.o: /Users/manaskumar/Desktop/MAX-OS-P1/assembly/interrupt.asm
+	$(AS) $< -f elf -o $@
+
+boot.bin: /Users/manaskumar/Desktop/MAX-OS-P1/assembly/boot.asm
+	$(AS) -f bin $< -o $@
 
 final_raw_binary.bin: boot.bin kernel.bin
 	cat $^ > $@
@@ -54,16 +65,14 @@ run: final_raw_binary.bin
 	qemu-system-i386 -fda $<
 
 clean:
-	rm -f tetris.o boot.bin shell.o tetris.o kernel.bin final_raw_binary.bin kernel-entry.o kernel.o screen_driver.o idt.o isr.o keyboard.o interrupts.o util.o memory.o port.o time.o
+	rm -f boot.bin shell.o kernel.bin final_raw_binary.bin kernel-entry.o kernel.o screen_driver.o idt.o isr.o keyboard.o interrupts.o util.o port.o time.o calculator.o text_editor.o
 
 dump: final_raw_binary.bin
 	objdump -D -m i386 -b binary final_raw_binary.bin > dump.txt
 
-kernel.elf: kernel-entry.o kernel.o screen_driver.o idt.o isr.o keyboard.o interrupts.o
-	x86_64-elf-ld -m elf_i386 -o $@ -Ttext 0x1000 $^
+kernel.elf: kernel-entry.o kernel.o screen_driver.o idt.o isr.o keyboard.o interrupts.o shell.o port.o util.o time.o calculator.o text_editor.o
+	$(LD) -m elf_i386 -o $@ -Ttext 0x1000 $^
 
 debug: final_raw_binary.bin kernel.elf
 	qemu-system-i386 -s -S -fda final_raw_binary.bin &
 	i386-elf-gdb -ex "target remote localhost:1234" -ex "symbol-file kernel.elf"
-
-

@@ -8,6 +8,7 @@
 
 
 static char key_buffer[256];
+static char last_char = 0;
 
 const char scancode_to_char[] = {'?', '?', '1', '2', '3', '4', '5', '6',
                          '7', '8', '9', '0', '-', '=', '?', '?', 'Q', 'W', 'E', 'R', 'T', 'Y',
@@ -51,6 +52,6 @@ static void keyboard_callback(registers_t *regs) {
 }
 
 void init_keyboard(){
-    install_interrupt_handler(33,keyboard_callback); //register keyboard callback as handler for irq1
+    install_interrupt_handler(33,keyboard_callback); 
 }
 

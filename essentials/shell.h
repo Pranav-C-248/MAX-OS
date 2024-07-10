@@ -14,4 +14,7 @@ extern void set_command(int n,cmd function);
 extern void parse_command(char* command);
 extern void cls();
 extern void exit();
+extern void random();
+extern void echo(char *args);
+extern void lay(char *args);
 // extern void prove_dyna_memory();

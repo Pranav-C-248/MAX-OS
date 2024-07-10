@@ -10,6 +10,8 @@ void set_cursor(int offset) {
     port_byte_out(VGA_DATA_REGISTER, (unsigned char) (offset & 0xff));
 }
 
+
+
 int get_cursor(){
     //select high byte
     port_byte_out(VGA_CTRL_REGISTER,VGA_OFFSET_HIGH);
@@ -103,3 +105,10 @@ void clrscr()
     set_cursor(get_offset(0, 0));
 }
 
+
+void set_char(char character,int offset)
+{
+    unsigned char* vm= (unsigned char*) VIDEO_ADDRESS;
+    vm[offset]=character;
+    vm[offset+1]=WHITE_ON_BLACK;
+}

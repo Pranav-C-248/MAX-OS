@@ -1,5 +1,6 @@
 #include "util.h"
 #include "screen_driver.h"
+#include "keyboard.h"
 
 
 static unsigned int current_seed = 1; // Default seed
@@ -7,7 +8,21 @@ static unsigned int current_seed = 1; // Default seed
 // LCG constants from Numerical Recipes
 #define LCG_A 1664525
 #define LCG_C 1013904223
-#define LCG_M 4294967296 // 2^32, using a 32-bit integer overflow automatically
+#define LCG_M 4294967296 
+
+
+
+char* itoa(int value) {
+    static char buffer[12];
+    int i = 10;
+    buffer[11] = '\0';
+    do {
+        buffer[i--] = (value % 10) + '0';
+        value /= 10;
+    } while (value > 0);
+    return &buffer[i + 1];
+}
+
 
 
 int string_length(char *s) {
@@ -59,12 +74,23 @@ int compare_string(char s1[], char s2[]) {
     return s1[i] - s2[i];
 }
 
+char* my_strchr(const char* s, int c) {
+    while (*s != '\0') {
+        if (*s == c) {
+            return (char *)s;
+        }
+        s++;
+    }
+    return NULL;
+}
+
 void srand(unsigned int seed) {
     current_seed = seed;
 }
 
 int rand() {
-    // LCG formula: X_{n+1} = (A * X_n + C) % M
+    
     current_seed = (LCG_A * current_seed + LCG_C) % LCG_M;
     return current_seed & 0x7FFFFFFF; // Return the positive range of int
 }
+

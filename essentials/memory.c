@@ -1,6 +1,6 @@
 #include "memory.h"
-#include "/mnt/d/Backup/azazel/Desktop/OS_DEV/MAX-OS/essentials/screen_driver.h"
-#include "/mnt/d/Backup/azazel/Desktop/OS_DEV/MAX-OS/essentials/util.h"
+#include "screen_driver.h"
+#include "util.h"
 
 /*So heres what well do:
 1)Get one big chunk of memory and assign all dynamic mem chunks from that chunk.
